@@ -1,7 +1,7 @@
 # 北商 Python 入門助教
 
 
-## 本地執行
+## (1) 本地執行
 
 > 安裝需求
 - Python >= 3.12.1
@@ -23,11 +23,15 @@ $ poetry shell
 
 ### 執行
 
+設定環境變數: 
+- OPENAI_API_KEY=<你的 OpenAI API Key>
+- OPENAI_ASSISTANT_ID=<你的 OpenAI Assistant ID>
+
 ```bash
 $ streamlit run main.py
 ```
 
-## 安裝及部署
+## (2) 安裝及部署
 
 > 安裝需求
 - Docker
@@ -61,3 +65,12 @@ $ docker compose build
 ```bash
 $ docker compose up -d
 ```
+
+
+## (3) 更新程式
+
+```bash
+$ cd ntub-python-assistant
+$ git pull
+```
+執行`下載專案`後的操作
