@@ -1,0 +1,19 @@
+version: "3"
+
+x-logging: &logging
+  logging:
+    driver: json-file
+    options:
+      max-size: 100M
+
+services:
+  web:
+    build: .
+    image: coderun_client:latest
+    ports:
+      - "8502:8502"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_ASSISTANT_ID}
+    <<: *logging
+    restart: always
