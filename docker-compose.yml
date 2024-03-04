@@ -14,6 +14,6 @@ services:
       - "8502:8502"
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - OPENAI_API_KEY=${OPENAI_ASSISTANT_ID}
+      - OPENAI_ASSISTANT_ID=${OPENAI_ASSISTANT_ID}
     <<: *logging
     restart: always
