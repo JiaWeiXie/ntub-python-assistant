@@ -56,23 +56,27 @@ if is_submit:
 
     thread_id = st.session_state["thread_id"]
 
-    run = client.beta.threads.runs.create(
-        thread_id=thread_id,
-        assistant_id=OPENAI_ASSISTANT_ID,
-    )
     st.metric("字詞數", num_tokens_from_string(question))
-    run = client.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run.id)
+    st.toast("已送出問題")
+    client.beta.threads.messages.create(
+        thread_id=thread_id,
+        role="user",
+        content=question,
+    )
     with st.spinner("等待助教回覆"):
+        run = client.beta.threads.runs.create(
+            thread_id=thread_id,
+            assistant_id=OPENAI_ASSISTANT_ID,
+        )
         while run.status in ["queued", "in_progress"]:
             st.toast(run.status)
-            time.sleep(1)
-            run = client.beta.threads.runs.retrieve(
-                thread_id=thread_id, run_id=run.id
-            )
+            time.sleep(3)
+            run = client.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run.id)
 
         if run.status == "completed":
             messages = client.beta.threads.messages.list(thread_id=thread_id)
-            for message in messages:
+            messages.data.reverse()
+            for message in messages.data:
                 with st.chat_message(ROLES[message.role]):
                     for content in message.content:
                         if content.type == "text":
