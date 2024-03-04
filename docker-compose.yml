@@ -9,7 +9,7 @@ x-logging: &logging
 services:
   web:
     build: .
-    image: coderun_client:latest
+    image: ntub_python_assistant:latest
     ports:
       - "8502:8502"
     environment:
