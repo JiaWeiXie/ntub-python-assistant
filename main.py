@@ -1,5 +1,8 @@
 import os
 import time
+import json
+
+from pathlib import Path
 
 import streamlit as st
 import tiktoken
@@ -10,8 +13,35 @@ OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 OPENAI_ASSISTANT_ID = os.environ.get("OPENAI_ASSISTANT_ID")
 ROLES = {
     "user": "你",
-    "assistant": "助教",
+    "assistant": "助理",
 }
+SETTINGS_FILE = Path("syssettings.json")
+
+
+if "is_authenticated" in st.session_state:
+    is_authenticated = st.session_state.get("is_authenticated", False)
+else:
+    is_authenticated = False
+
+enable_guest_vaildation = True
+saved_geust_password = ""
+if SETTINGS_FILE.exists():
+    with SETTINGS_FILE.open(encoding="utf-8") as f:
+        data = f.read()
+        if data:
+            settings = json.loads(data)
+            enable_guest_vaildation = settings.get("enable_guest_vaildation", True)
+            saved_geust_password = settings.get("guest_password", "")
+
+if enable_guest_vaildation and not is_authenticated:
+    geust_password = st.sidebar.text_input("請輸入訪客密碼", type="password")
+    if st.sidebar.button("登入") and geust_password == saved_geust_password:
+        st.sidebar.success("登入成功")
+        st.session_state["is_authenticated"] = True
+    else:
+        st.error("請輸入正確的訪客密碼")
+        st.stop()
+
 
 if OPENAI_API_KEY is None:
     st.error("請設定 OpenAI API Key")
@@ -63,7 +93,7 @@ if is_submit:
         role="user",
         content=question,
     )
-    with st.spinner("等待助教回覆"):
+    with st.spinner("等待助理回覆"):
         run = client.beta.threads.runs.create(
             thread_id=thread_id,
             assistant_id=OPENAI_ASSISTANT_ID,
@@ -82,7 +112,7 @@ if is_submit:
                         if content.type == "text":
                             st.markdown(content.text.value)
         else:
-            st.error("助教暫時無法回覆")
+            st.error("助理暫時無法回覆")
             st.write(run.status)
             if run.last_error:
                 st.markdown(f"錯誤代碼: `{run.last_error.message}`")
