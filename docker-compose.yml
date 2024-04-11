@@ -11,7 +11,7 @@ services:
     build: .
     image: ntub_python_assistant:latest
     ports:
-      - "8502:8502"
+      - "${WEB_PORT:-8500}:8500"
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OPENAI_ASSISTANT_ID=${OPENAI_ASSISTANT_ID}
@@ -19,4 +19,4 @@ services:
     <<: *logging
     restart: always
     volumes:
-      - syssettings.json:/app/syssettings.json
+      - ./syssettings.json:/app/syssettings.json

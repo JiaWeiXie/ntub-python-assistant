@@ -18,8 +18,8 @@ RUN export POETRY_HOME=/opt/poetry \
   && pip install --no-cache-dir --disable-pip-version-check --no-warn-script-location --user -r requirements.txt
 
 COPY main.py main.py
-EXPOSE 8502
+EXPOSE 8500
 
-HEALTHCHECK CMD curl --fail http://localhost:8502/_stcore/health
+HEALTHCHECK CMD curl --fail http://localhost:8500/_stcore/health
 
-ENTRYPOINT ["python", "-m", "streamlit", "run", "main.py", "--server.port=8502", "--server.address=0.0.0.0"]
+ENTRYPOINT ["python", "-m", "streamlit", "run", "main.py", "--server.port=8500", "--server.address=0.0.0.0"]
