@@ -18,6 +18,7 @@ RUN export POETRY_HOME=/opt/poetry \
   && pip install --no-cache-dir --disable-pip-version-check --no-warn-script-location --user -r requirements.txt
 
 COPY main.py main.py
+COPY pages pages
 EXPOSE 8500
 
 HEALTHCHECK CMD curl --fail http://localhost:8500/_stcore/health
