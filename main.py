@@ -11,9 +11,10 @@ from openai import OpenAI
 
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 OPENAI_ASSISTANT_ID = os.environ.get("OPENAI_ASSISTANT_ID")
+ASSISTANT_ROLE_NAME = os.environ.get("ASSISTANT_ROLE_NAME", "助理")
 ROLES = {
     "user": "你",
-    "assistant": "助理",
+    "assistant": ASSISTANT_ROLE_NAME,
 }
 SETTINGS_FILE = Path("syssettings.json")
 
@@ -93,7 +94,7 @@ if is_submit:
         role="user",
         content=question,
     )
-    with st.spinner("等待助理回覆"):
+    with st.spinner(f"等待{ASSISTANT_ROLE_NAME}回覆"):
         run = client.beta.threads.runs.create(
             thread_id=thread_id,
             assistant_id=OPENAI_ASSISTANT_ID,
@@ -112,7 +113,7 @@ if is_submit:
                         if content.type == "text":
                             st.markdown(content.text.value)
         else:
-            st.error("助理暫時無法回覆")
+            st.error(f"{ASSISTANT_ROLE_NAME}暫時無法回覆")
             st.write(run.status)
             if run.last_error:
                 st.markdown(f"錯誤代碼: `{run.last_error.message}`")

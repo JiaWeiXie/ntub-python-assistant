@@ -16,6 +16,7 @@ services:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OPENAI_ASSISTANT_ID=${OPENAI_ASSISTANT_ID}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - ASSISTANT_ROLE_NAME=${ASSISTANT_ROLE_NAME}
     <<: *logging
     restart: always
     volumes:
